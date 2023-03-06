@@ -12,6 +12,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -21,6 +23,7 @@ public class Pedido {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 	private Long pedidoid;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -88,7 +91,6 @@ public class Pedido {
 	public void setStatus(String status) {
 		this.status = status;
 	}
-	
 
 	
 	
