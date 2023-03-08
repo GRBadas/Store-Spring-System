@@ -82,6 +82,9 @@ public class PedidoController {
 		
 		Cliente cliente = clienteRepository.findById(pedidoDetails.getClientId())
 			    .orElseThrow(() -> new ResourceNotFoundException("Cliente não encontrado" + pedidoDetails.getClientId()));
+		Produto produto = produtoRepository.findById(pedidoDetails.getProductId())
+				.orElseThrow(() -> new ResourceNotFoundException("Produto não encontrado " + pedidoDetails.getProductId()));
+		pedido.setProduto(produto);
 		pedido.setCliente(cliente);
 		pedido.setDate(pedidoDetails.getDate());
 		pedido.setStatus(pedidoDetails.getStatus());
