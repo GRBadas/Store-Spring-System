@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -29,7 +30,13 @@ public class Pedido {
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "clientid", referencedColumnName = "clientid", nullable = false)
-	private Cliente client;
+	@NotNull
+	private Cliente cliente;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "productid", referencedColumnName = "productid", nullable = false)
+	@NotNull
+	private Produto produto;
 	
 	@Column
 	private Date date;
