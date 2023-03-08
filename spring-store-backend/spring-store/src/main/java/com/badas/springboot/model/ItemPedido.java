@@ -10,8 +10,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 @Entity
 @Table(name = "item_pedido")
+@Data @NoArgsConstructor
 public class ItemPedido {
 	
 	@Id
@@ -19,11 +23,11 @@ public class ItemPedido {
 	private Long itemPedidoId;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "pedidoid", referencedColumnName = "pedidoid")
+	@JoinColumn(name = "pedidoid", referencedColumnName = "pedidoid", nullable = false)
 	Pedido pedido;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "productid", referencedColumnName = "productid")
+	@JoinColumn(name = "productid", referencedColumnName = "productid", nullable = false)
 	Produto produto;
 	
 	@Column
@@ -31,60 +35,5 @@ public class ItemPedido {
 	
 	@Column
 	private String unitaryValue;
-
-	public ItemPedido(Long itemPedidoId, Pedido pedido, Produto produto, Long quantity, String unitaryValue) {
-		super();
-		this.itemPedidoId = itemPedidoId;
-		this.pedido = pedido;
-		this.produto = produto;
-		this.quantity = quantity;
-		this.unitaryValue = unitaryValue;
-	}
-
-	public ItemPedido() {
-		super();
-	}
-
-	public Long getItemPedidoId() {
-		return itemPedidoId;
-	}
-
-	public void setItemPedidoId(Long itemPedidoId) {
-		this.itemPedidoId = itemPedidoId;
-	}
-
-	public Pedido getPedido() {
-		return pedido;
-	}
-
-	public void setPedido(Pedido pedido) {
-		this.pedido = pedido;
-	}
-
-	public Produto getProduto() {
-		return produto;
-	}
-
-	public void setProduto(Produto produto) {
-		this.produto = produto;
-	}
-
-	public Long getQuantity() {
-		return quantity;
-	}
-
-	public void setQuantity(Long quantity) {
-		this.quantity = quantity;
-	}
-
-	public String getUnitaryValue() {
-		return unitaryValue;
-	}
-
-	public void setUnitaryValue(String unitaryValue) {
-		this.unitaryValue = unitaryValue;
-	}
-	
-	
 
 }
