@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.badas.springboot.exception.ResourceNotFoundException;
 import com.badas.springboot.model.Cliente;
 import com.badas.springboot.repository.ClienteRepository;
+import com.badas.springboot.service.ClienteService;
 
 @RequestMapping("/api/v1/")
 @RestController
@@ -25,6 +26,8 @@ public class ClienteController {
 	
 	@Autowired
 	private ClienteRepository clienteRepository;
+	
+	@Autowired ClienteService clienteService;
 	
 	@GetMapping("/clients")
 	public List<Cliente> getAllClientes(){
@@ -38,27 +41,20 @@ public class ClienteController {
 	
 	@GetMapping("/clients/{clientid}")
 	public ResponseEntity<Cliente> getClientById(@PathVariable Long clientid) {
-		Cliente cliente= clienteRepository.findById(clientid).orElseThrow(() -> new ResourceNotFoundException("Cliente não encontrado" + clientid));
+		Cliente cliente= clienteService.getClientById(clientid);
 		return ResponseEntity.ok(cliente);
 	}
 	
 	@PutMapping("/clients/{clientid}")
 	public ResponseEntity<Cliente> updateProduto(@PathVariable Long clientid, @RequestBody Cliente clienteDetails) {
-		Cliente cliente = clienteRepository.findById(clientid).orElseThrow(() -> new ResourceNotFoundException("Cliente não encontrado" + clientid));
-		
-		cliente.setName(clienteDetails.getName());
-		cliente.setEmail(clienteDetails.getEmail());
-		cliente.setPassword(clienteDetails.getPassword());
-		cliente.setSurname(clienteDetails.getSurname());
-		
-		Cliente updatedClient = clienteRepository.save(cliente);
+		Cliente updatedClient = clienteService.updateProduto(clientid, clienteDetails);
 		return ResponseEntity.ok(updatedClient);
 	}
 	
 	@DeleteMapping("/clients/{clientid}")
 	public ResponseEntity<Map<String, Boolean>> deleteClient(@PathVariable long clientid) {
-		Cliente cliente = clienteRepository.findById(clientid).orElseThrow(() -> new ResourceNotFoundException("Cliente não encontrado" + clientid));
-		clienteRepository.delete(cliente);
+		clienteService.deleteClient(clientid);
+		
 		Map<String, Boolean> response = new HashMap<>();
 		response.put("deleted", Boolean.TRUE);
 		return ResponseEntity.ok(response);

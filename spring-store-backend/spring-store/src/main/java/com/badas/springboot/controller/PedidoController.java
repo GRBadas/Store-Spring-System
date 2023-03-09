@@ -25,6 +25,7 @@ import com.badas.springboot.model.Produto;
 import com.badas.springboot.repository.ClienteRepository;
 import com.badas.springboot.repository.PedidoRepository;
 import com.badas.springboot.repository.ProdutoRepository;
+import com.badas.springboot.service.PedidoService;
 import com.badas.springboot.model.Cliente;
 
 @RestController
@@ -40,6 +41,9 @@ public class PedidoController {
 	@Autowired
 	private ProdutoRepository produtoRepository;
 	
+	@Autowired
+	private PedidoService pedidoService;
+	
 	@GetMapping("/pedidos")
 	public List<Pedido> getAllProdutos() {
 		return pedidoRepository.findAll();
@@ -47,26 +51,7 @@ public class PedidoController {
 	
 	@PostMapping("/pedidos")
 	public ResponseEntity<Pedido> createPedido(@Valid @RequestBody PedidoDTO pedidoDTO) {
-		Optional<Cliente> optionalCliente = clienteRepository.findById(pedidoDTO.getClientId());
-		Optional<Produto> optionalProduto = produtoRepository.findById(pedidoDTO.getProductId());
-	   
-	    if(optionalCliente.isEmpty()) {
-	    	return ResponseEntity.notFound().build();
-	    }
-	    if(optionalProduto.isEmpty()) {
-	    	return ResponseEntity.notFound().build();
-	    }
-	    Produto produto = optionalProduto.get();
-	    Cliente cliente = optionalCliente.get();
-	    
-	    Pedido novoPedido = new Pedido();
-	    novoPedido.setDate(pedidoDTO.getDate());
-	    novoPedido.setTotalValue(pedidoDTO.getTotalValue());
-	    novoPedido.setStatus(pedidoDTO.getStatus());
-	    novoPedido.setProduto(produto);
-	    novoPedido.setCliente(cliente);
-
-	    Pedido pedidoCriado = pedidoRepository.save(novoPedido);
+	    Pedido pedidoCriado = pedidoService.createPedido(pedidoDTO);
 	    return ResponseEntity.ok().body(pedidoCriado);
 	}
 	
@@ -78,20 +63,8 @@ public class PedidoController {
 	
 	@PutMapping("/pedidos/{pedidoid}")
 	public ResponseEntity<Pedido> updatePedido(@PathVariable Long pedidoid, @RequestBody PedidoDTO pedidoDetails) {
-		Pedido pedido = pedidoRepository.findById(pedidoid).orElseThrow(() -> new ResourceNotFoundException("Pedido não encontrado" + pedidoid));
-		
-		Cliente cliente = clienteRepository.findById(pedidoDetails.getClientId())
-			    .orElseThrow(() -> new ResourceNotFoundException("Cliente não encontrado" + pedidoDetails.getClientId()));
-		Produto produto = produtoRepository.findById(pedidoDetails.getProductId())
-				.orElseThrow(() -> new ResourceNotFoundException("Produto não encontrado " + pedidoDetails.getProductId()));
-		pedido.setProduto(produto);
-		pedido.setCliente(cliente);
-		pedido.setDate(pedidoDetails.getDate());
-		pedido.setStatus(pedidoDetails.getStatus());
-		pedido.setTotalValue(pedidoDetails.getTotalValue());
-		
-		Pedido updatedOrder = pedidoRepository.save(pedido);
-		return ResponseEntity.ok(updatedOrder);
+		Pedido pedido = pedidoService.updatePedido(pedidoid, pedidoDetails);
+		return ResponseEntity.ok(pedido);
 	}
 	
 	@DeleteMapping("/pedidos/{pedidoid}")

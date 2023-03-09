@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.badas.springboot.model.Produto;
 import com.badas.springboot.repository.ProdutoRepository;
+import com.badas.springboot.service.ProdutoService;
 import com.badas.springboot.exception.ResourceNotFoundException;
 
 @RestController
@@ -25,6 +26,8 @@ public class ProdutoController {
 	
 	@Autowired
 	private ProdutoRepository produtoRepository;
+	
+	@Autowired ProdutoService produtoService;
 	
 	@GetMapping("/products")
 	public List<Produto> getAllProdutos() {
@@ -44,15 +47,8 @@ public class ProdutoController {
 	
 	@PutMapping("/products/{productid}")
 	public ResponseEntity<Produto> updateProduto(@PathVariable Long productid, @RequestBody Produto produtoDetails) {
-		Produto produto = produtoRepository.findById(productid).orElseThrow(() -> new ResourceNotFoundException("Produto não encontrado" + productid));
-		
-		produto.setName(produtoDetails.getName());
-		produto.setPrice(produtoDetails.getPrice());
-		produto.setDescription(produtoDetails.getDescription());
-		produto.setQuantity(produtoDetails.getQuantity());
-		
-		Produto updatedProduct = produtoRepository.save(produto);
-		return ResponseEntity.ok(updatedProduct);
+		Produto produto = produtoService.updateProduto(productid, produtoDetails);
+		return ResponseEntity.ok(produto);
 	}
 	
 	@DeleteMapping("/products/{productid}")
