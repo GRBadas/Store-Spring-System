@@ -17,7 +17,7 @@ import com.badas.springboot.repository.UserRepository;
 public class UserDetailsServiceImpl implements UserDetailsService {
 	
 	@Autowired
-	UserRepository userRepository;
+	private UserRepository userRepository;
 
 	public UserDetailsServiceImpl(UserRepository userRepository) {
 		this.userRepository = userRepository;
@@ -27,7 +27,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		UserModel userModel = userRepository.findByUsername(username).
 				orElseThrow(() -> new UsernameNotFoundException("Usuário " + username + "Não encontrado."));
-		return new User(userModel.getUsername(), userModel.getPassword(), true, true, true, true, userModel.getAuthorities());
+		return User.builder()
+				.username(userModel.getUsername())
+				.password(userModel.getPassword())
+				.authorities(userModel.getAuthorities())
+				.build();
 	}
 
 }

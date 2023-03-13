@@ -21,7 +21,6 @@ import lombok.Data;
 
 @Entity
 @Table(name = "user")
-@Data
 public class UserModel implements UserDetails,Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -47,6 +46,7 @@ public class UserModel implements UserDetails,Serializable {
 		return this.roles;
 	}
 
+	
 	@Override
 	public String getPassword() {
 		// TODO Auto-generated method stub
@@ -81,6 +81,26 @@ public class UserModel implements UserDetails,Serializable {
 	public boolean isEnabled() {
 		// TODO Auto-generated method stub
 		return true;
+	}
+
+
+	public Long getUserId() {
+		return userId;
+	}
+
+
+	public void setUserId(Long userId) {
+		this.userId = userId;
+	}
+
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 	
 	

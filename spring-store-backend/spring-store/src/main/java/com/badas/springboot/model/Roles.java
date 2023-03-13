@@ -15,9 +15,6 @@ import org.springframework.security.core.GrantedAuthority;
 
 import com.badas.springboot.enums.RoleName;
 
-import lombok.Data;
-
-@Data
 @Entity
 @Table(name = "roles")
 public class Roles implements GrantedAuthority, Serializable {
@@ -36,6 +33,24 @@ public class Roles implements GrantedAuthority, Serializable {
 	public String getAuthority() {
 		return this.rolename.toString();
 	}
+
+	public Long getRoleId() {
+		return roleId;
+	}
+
+	public void setRoleId(Long roleId) {
+		this.roleId = roleId;
+	}
+
+	public RoleName getRolename() {
+		return rolename;
+	}
+
+	public void setRolename(RoleName rolename) {
+		this.rolename = rolename;
+	}
+	
+	
 	
 	
 
