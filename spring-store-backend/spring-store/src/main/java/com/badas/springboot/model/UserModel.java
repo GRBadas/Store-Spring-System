@@ -22,7 +22,7 @@ import lombok.Data;
 @Entity
 @Table(name = "user")
 @Data
-public class User implements UserDetails,Serializable {
+public class UserModel implements UserDetails,Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -44,8 +44,7 @@ public class User implements UserDetails,Serializable {
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.roles;
 	}
 
 	@Override
@@ -83,5 +82,7 @@ public class User implements UserDetails,Serializable {
 		// TODO Auto-generated method stub
 		return true;
 	}
+	
+	
 
 }
